@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Paper, useMediaQuery, Theme, makeStyles, createStyles, Typography, Button } from '@material-ui/core'
+import { Grid, Paper, useMediaQuery, Theme, makeStyles, createStyles, Typography, Button, Link, useTheme } from '@material-ui/core'
 import Navbar from '../components/homePgComps/Navbar'
 import RightSideBar from '../components/homePgComps/RightSideBar'
 import Content from '../components/homePgComps/Content'
@@ -9,18 +9,19 @@ import '../styles/animations.sass'
 //@ts-ignore
 import mountains from '../images/mountainImg.jpg'
 import gatsby from '../images/gatsby-icon.png';
-import { Parallax, ParallaxBanner } from 'react-scroll-parallax'
+// import { Parallax, ParallaxBanner } from 'react-scroll-parallax'
+import { Parallax, Background } from 'react-parallax';
+import { Breadcrumbs } from '@material-ui/core';
+import BreadCrumbComponent from '../components/homePgComps/BreadCrumbComponent'
 
-//Navbar sticky until reaches bottom of bg image... no navbar needed
-//left right are to be fixed
-//* see if you can achrive these results in sass. It's cleaner that way if it's possible
-// add an interpolating text over background "Formidable Pencil" and interpolates downwards
 // disable navbar on all screens beside sm where it becomes a hamburger. Put the navigation there.
-// There's no need to crowed the webpage. The above todos will suffice
+//* this page will be the whole blogging site. When navigating from home page transition transition (css) out with bread crumbs and the wallpaper change out for another.
+//*    put the general topic in place of brand name
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    negativeMargin: { padding: 20 }
+    gridContainer: { /* padding: 20, */ backgroundColor: theme.palette.grey[200] },
+    horizontalMargins: { marginLeft: 40, marginRight: 40 },
   })
 )
 
@@ -31,7 +32,6 @@ export interface ContentT {
   content: string
   datePublished: string //will be a number though
   tag?: string
-
 }
 
 const dynamicContent: ContentT[] = [ //WordPress will have it it's content different
@@ -46,29 +46,58 @@ const dynamicContent: ContentT[] = [ //WordPress will have it it's content diffe
 
 function HomeBlogPage() {
   const classes = useStyles()
+  // const bgColor = { backgroundColor: useTheme().palette.secondary2.main }
+  const homePage = true
+  // console.log(homePage);
+
+
   return (
     <>
+      <Navbar />
       <div className='blogMainPgLargeImg' alt="mountains">
-        <Parallax className="parallaxBrandNameContainer"/*  y={[-300, 500]} */ y={["-200px", "200px"]} x={["1100px", "-800px"]} tagInner="figure">
-          <Typography className="brandName" variant='h1'> Formidable Pencil</Typography>
+        <Parallax
+          style={{ height: "100%" }}
+          bgImage={'../images/mountainImg.jpg'}
+          strength={100}
+          renderLayer={percentage => {
+            const x = 300
+            const marginTop = 16 * (percentage * 100)
+            return (
+              <div
+                style={{
+                  marginTop,
+                  position: 'absolute',
+                  right: 100,
+                  top: -960,
+                  // transform: `translate(${x}px, ${y}px)`,
+                }}
+              >
+                <Typography className="brandName" variant='h1'>Formidable Pencil</Typography>
+              </div>
+            )
+          }}
+        >
         </Parallax>
       </div>
-      <Navbar />
-      <div className={classes.negativeMargin}>
-        <Grid container spacing={5}>
-          <Grid item justify="center" xs={2}>
+
+      <div className={classes.gridContainer}>
+
+        <div className='thickDivider' />
+        <Grid container>
+          <Grid item justify="center" xs>
             <LeftSideBar />
           </Grid>
-          <Grid item justify="center" xs={8}>
-            <p className='latestPosts'>
-              Latest posts
-            </p>
+          <Grid item justify="center" className={classes.horizontalMargins} xs={7}>
+
+            {homePage ? <p className='latestPosts'>Latest posts</p>
+              : <BreadCrumbComponent />}
+
             {dynamicContent.map(data =>
               <Content data={data} />
             )}
           </Grid>
-          <Grid item justify="center" xs={2}>
-            <RightSideBar />
+          <Grid item justify="center" xs>
+            {/* <RightSideBar /> */}
           </Grid>
         </Grid>
       </div>

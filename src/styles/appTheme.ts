@@ -1,4 +1,4 @@
-import { green, orange, deepPurple, indigo, purple } from '@material-ui/core/colors';
+import { green, orange, deepPurple, indigo, purple, red, cyan, blue } from '@material-ui/core/colors';
 import { createMuiTheme, Theme } from '@material-ui/core';
 import { deepPurple800 } from 'material-ui/styles/colors';
 
@@ -30,6 +30,12 @@ const appTheme = createMuiTheme({
       light: deepPurple[600],
     },
     secondary: indigo,
+    secondary2: {
+      light: indigo[100],
+      main: indigo[100],
+      dark: indigo[100],
+    },
+    grey: { A400: '#F6F2FF' },
   },
   typography: {
     body1: { fontFamily: 'Tajawal-Medium' },

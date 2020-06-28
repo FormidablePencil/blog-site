@@ -11,7 +11,6 @@ import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core';
 import configureStore from './src/reduxStore';
 import appTheme from './src/styles/appTheme';
-import { ParallaxProvider } from 'react-scroll-parallax';
 import './static/fonts.css'
 
 const baseTheme = createMuiTheme();
@@ -19,11 +18,9 @@ const baseTheme = createMuiTheme();
 export const wrapRootElement = ({ element }) => {
   return (
     // <ProviderRedux store={configureStore}>
-    <ParallaxProvider>
       <ThemeProvider theme={appTheme}>
         {element}
       </ThemeProvider>
-    </ParallaxProvider>
     // </ProviderRedux>
   );
 }

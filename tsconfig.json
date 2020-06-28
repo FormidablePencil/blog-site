@@ -12,5 +12,8 @@
     "allowJs": true,
     "noImplicitAny": false,
   },
-  "exclude": ["node_modules", "public", ".cache"]
+  "exclude": ["node_modules", "public", ".cache"],
+  "rules": {
+    "no-console": false
+}
 }
