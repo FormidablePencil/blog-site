@@ -48,7 +48,7 @@ function HomeBlogPage() {
   const classes = useStyles()
   // const bgColor = { backgroundColor: useTheme().palette.secondary2.main }
   const homePage = true
-  // console.log(homePage);
+  console.log('hello world people');
 
 
   return (

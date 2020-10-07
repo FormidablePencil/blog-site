@@ -1,5 +1,7 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { Grid, Paper, Typography, Theme, makeStyles, createStyles, ListSubheader, ListItemIcon, ListItemText, ListItem, List, Collapse, Divider } from '@material-ui/core'
+import { push } from 'gatsby'
+import { nestedItems } from '../../staticData'
 
 export const useSidebarStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -15,63 +17,44 @@ export const useStyles = makeStyles((theme: Theme) =>
 
 const mlNestedItem = 20
 
-const nestedItems = [
-  {
-    item: 'store', nested: [
-      {
-        item: 'milk', nested: [
-          {
-            item: 't23', nested: [
-              { item: 'last', nested: null },
-              {
-                item: 'last', nested: [
-                  { item: 'last', nested: null }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      { item: 'cerial', nested: null },
-      // {
-      //   item: 'yogart', nested: [
-      //     { item: 'dairy' },
-      //     { item: 'cow' },
-      //   ]
-      // },
-    ]
-  },
-  { item: 'freds' },
-  {
-    item: 'pc', nested: [
-      { item: 'lol' },
-      { item: 'MC' }
-    ]
-  },
+// [order downward, level]
 
-]
 
-const NestedItem = ({ collectionNested, marginLeft, nestedOpen, whatItem, onClickHandler }) => {
+const NestedItem = ({ collectionNested, marginLeft, nestedOpen, onClickHandler }) => {
   const classes = useStyles()
+  const ref = useRef(null)
+  const ref2 = useRef(null)
+  useEffect(() => {
+    setTimeout(() => {
+      console.log(ref)
+      // console.log(ref2)
+    }, 2000);
+  }, [])
 
   return (
     <>
+      <div ref={ref2} />
+      <Collapse timeout="auto" unmountOnExit>
+        <List ref={ref} component="div" disablePadding>
+          <ListItem button onClick={() => onClickHandler('@')}>
+            <ListItemText style={{ marginLeft: marginLeft }} />
+          </ListItem>
+        </List>
+      </Collapse>
       {collectionNested.map((collection, index) => {
-        const returnWeatherNestedIsOpen = (whatItem, whatNestedItem) => {
-          if (nestedOpen[whatItem]) {
-            if (nestedOpen[whatItem][whatNestedItem]) {
-              return true
-            } else return false
+        // const returnWeatherNestedIsOpen = (whatItem, whatNestedItem) => {
+        //   if (nestedOpen[whatItem]) {
+        //     if (nestedOpen[whatItem][whatNestedItem]) {
+        //       return true
+        //     } else return false
 
-          } else return false
-        }
+        //   } else return false
+        // }
         return (
           <>
-            <Collapse in={true} timeout="auto" unmountOnExit>
-              {`${returnWeatherNestedIsOpen(whatItem, index)}+ 1`}
-              sd
-              <List component="div" disablePadding >
-                <ListItem button onClick={() => onClickHandler(whatItem, index)}>
+            <Collapse timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button onClick={() => onClickHandler('@')}>
                   <ListItemText primary={collection.item} style={{ marginLeft: marginLeft }} />
                 </ListItem>
               </List>
@@ -80,7 +63,7 @@ const NestedItem = ({ collectionNested, marginLeft, nestedOpen, whatItem, onClic
               // <div style={{ marginLeft: 20 }}>
               <NestedItem
                 onClickHandler={onClickHandler}
-                whatItem={whatItem + 1}
+                // whatItem={whatItemInCollection}
                 collectionNested={collection.nested}
                 marginLeft={marginLeft + mlNestedItem}
                 nestedOpen={nestedOpen}
@@ -95,20 +78,16 @@ const NestedItem = ({ collectionNested, marginLeft, nestedOpen, whatItem, onClic
 }
 
 function LeftSideBar() {
-  const [nestedOpen, setNestedOpen] = useState<any>([])
+  const [nestedOpen, setNestedOpen] = useState<any>(nestedItems)
 
   const sidebarClasses = useSidebarStyles()
   const classes = useStyles()
 
-  const onClickHandler = (whatItem, whatNestedItem) => {
-    if (nestedOpen[whatItem]) {
-      setNestedOpen({ ...nestedOpen, [whatItem]: { [whatNestedItem]: true } })
-      if (nestedOpen[whatItem][whatNestedItem]) {
-        setNestedOpen({ ...nestedOpen, [whatItem]: { [whatNestedItem]: !nestedOpen[whatItem][whatNestedItem] } })
-      } else {
-        setNestedOpen({ ...nestedOpen, [whatItem]: { [whatNestedItem]: true } })
-      }
-    }
+  // let whereAt = []
+  const onClickHandler = (ref) => console.log('toggleButtonByRef')
+
+  const getObjWithToggleHierarchy = () => {
+
   }
 
   return (
@@ -125,23 +104,26 @@ function LeftSideBar() {
         }
         className={classes.hierarchyList}
       >
-        {nestedItems.map((collection, index) =>
-          <>
-            <ListItem button onClick={() => onClickHandler(index, 0)}>
-              <ListItemText primary={collection.item} />
-            </ListItem>
-            {collection.nested &&
-              <NestedItem
-                onClickHandler={onClickHandler}
-                whatItem={0}
-                nestedOpen={nestedOpen}
-                collectionNested={collection.nested}
-                marginLeft={mlNestedItem}
-              />
-            }
-            <Divider />
-          </>
-        )}
+        {nestedItems.map((collection, index) => {
+          // const whatItemInCollection = [index]
+          return (
+            <div key={collection.id}>
+              <ListItem button onClick={() => onClickHandler('@')}>
+                <ListItemText primary={collection.item} />
+              </ListItem>
+              {collection.nested &&
+                <NestedItem
+                  onClickHandler={onClickHandler}
+                  // whatItem={[index]}
+                  nestedOpen={nestedOpen}
+                  collectionNested={collection.nested}
+                  marginLeft={mlNestedItem}
+                />
+              }
+              <Divider />
+            </div>
+          )
+        })}
 
       </List>
 
