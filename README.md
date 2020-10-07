@@ -1,8 +1,8 @@
 # Scrapped Project
-
 Was to be a blog site until I chose a different look to my blog site. Here's the repo of my current blog site: https://github.com/FormidablePencil/my-bubble
 
 #
+This blog-site project is not hosted anywhere but my actually blog is [here](https://github.com/FormidablePencil/Starbucks-replication.git)
 <img src="https://github.com/FormidablePencil/blog-site/blob/master/src/images/mainScreenImg.png?raw=true" width="600" title="app image">
 
 
